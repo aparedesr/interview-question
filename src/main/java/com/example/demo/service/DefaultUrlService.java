@@ -2,6 +2,10 @@ package com.example.demo.service;
 
 import static com.example.demo.Constants.URL_NOT_FOUND;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +30,7 @@ public class DefaultUrlService implements UrlService {
 			URLEntity ue = new URLEntity();
 			ue.setUrl(url);
 			ue.setHashcode(hashcode);
+			ue.setCreateDateTime(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
 			repository.save(ue);
 		}
 		return hashcode;
@@ -35,5 +40,10 @@ public class DefaultUrlService implements UrlService {
 	public String decodeUrl(String tinyUrl) throws RecordNotFoundException {
 		URLEntity ue = repository.findByHashCode(tinyUrl).orElseThrow(() -> new RecordNotFoundException(URL_NOT_FOUND));
 		return ue.getUrl();
+	}
+
+	@Override
+	public void purgeOldUrls() {
+		repository.deleteOldUrls();
 	}
 }

@@ -11,4 +11,6 @@ public interface UrlService {
 	String encodeUrl(String url);
 
 	String decodeUrl(String tinyUrl) throws RecordNotFoundException;
+
+	void purgeOldUrls();
 }

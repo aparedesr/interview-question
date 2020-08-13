@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import static com.example.demo.Constants.EXAMPLE_URL;
+import static com.example.demo.Constants.URL_NOT_FOUND;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,6 +53,16 @@ class DemoIntegrationTests {
 				.param("tinyUrl",
 						"44c0173"))
 				.andExpect(content().string(EXAMPLE_URL))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+
+	void whenLongUrl_DoesnotExist() throws Exception {
+		mvc.perform(get("/long")
+				.param("tinyUrl",
+						"44c0183"))
+				.andExpect(content().string(URL_NOT_FOUND))
 				.andExpect(status().isOk());
 	}
 

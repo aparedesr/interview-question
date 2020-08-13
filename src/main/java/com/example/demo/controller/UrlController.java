@@ -41,7 +41,7 @@ public class UrlController {
 			return ResponseEntity.ok(service.decodeUrl(tinyUrl));
 		} catch (RecordNotFoundException e) {
 			log.error(e.getMessage());
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.ok(e.getMessage());
 		}
 	}
 }
