@@ -1,4 +1,4 @@
-# Transformers
+# Shorten URLs
 Welcome to the shorten URLs Spring Boot App. These instructions will help you to build and run the application. 
 
 ### Build
