@@ -11,6 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.demo.service.UrlService;
 
+/**
+ * Test for the UrlService (coding and decoding url)
+ *
+ * @author andres
+ */
+
 @SpringBootTest
 class DemoServiceTests {
 

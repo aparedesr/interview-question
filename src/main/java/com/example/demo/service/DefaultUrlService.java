@@ -1,9 +1,13 @@
 package com.example.demo.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import static com.example.demo.Constants.URL_NOT_FOUND;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.persistence.RecordNotFoundException;
+import com.example.demo.persistence.URLEntity;
+import com.example.demo.persistence.UrlRepository;
 
 @Service
 /**
@@ -12,19 +16,24 @@ import org.springframework.stereotype.Service;
  * @author andres
  */
 public class DefaultUrlService implements UrlService {
-	Map<String, String> urls = new HashMap<>();
+	@Autowired
+	UrlRepository repository;
 
 	@Override
 	public String encodeUrl(String url) {
-		String hash = String.format("%x", url.hashCode());
-		if (!urls.containsKey(hash)) {
-			urls.put(hash, url);
+		String hashcode = String.format("%x", url.hashCode());
+		if (!repository.findByURL(url).isPresent()) {
+			URLEntity ue = new URLEntity();
+			ue.setUrl(url);
+			ue.setHashcode(hashcode);
+			repository.save(ue);
 		}
-		return hash;
+		return hashcode;
 	}
 
 	@Override
-	public String decodeUrl(String tinyUrl) {
-		return urls.getOrDefault(tinyUrl, null);
+	public String decodeUrl(String tinyUrl) throws RecordNotFoundException {
+		URLEntity ue = repository.findByHashCode(tinyUrl).orElseThrow(() -> new RecordNotFoundException(URL_NOT_FOUND));
+		return ue.getUrl();
 	}
 }

@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import static com.example.demo.Constants.ROOT_API_URL;
-import static java.util.Objects.isNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,10 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.persistence.RecordNotFoundException;
 import com.example.demo.service.UrlService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(ROOT_API_URL)
+@Slf4j
 public class UrlController {
 
 	@Autowired
@@ -34,11 +37,11 @@ public class UrlController {
 
 	@GetMapping("/long")
 	public ResponseEntity<String> longUrl(@RequestParam String tinyUrl) {
-		String originalUrl = service.decodeUrl(tinyUrl);
-		if (isNull(originalUrl)) {
+		try {
+			return ResponseEntity.ok(service.decodeUrl(tinyUrl));
+		} catch (RecordNotFoundException e) {
+			log.error(e.getMessage());
 			return ResponseEntity.notFound().build();
-		} else {
-			return ResponseEntity.ok(originalUrl);
 		}
 	}
 }

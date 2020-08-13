@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.persistence.RecordNotFoundException;
+
 /**
  * Interface exposing service url operations
  *
@@ -8,5 +10,5 @@ package com.example.demo.service;
 public interface UrlService {
 	String encodeUrl(String url);
 
-	String decodeUrl(String tinyUrl);
+	String decodeUrl(String tinyUrl) throws RecordNotFoundException;
 }
